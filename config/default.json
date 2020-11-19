@@ -1,3 +1,4 @@
 {
-    "mongoURI": "mongodb+srv://matheus:msz30061997m@cluster0.6vl9p.mongodb.net/dev_conector?retryWrites=true&w=majority"
+    "mongoURI": "mongodb+srv://matheus:msz30061997m@cluster0.6vl9p.mongodb.net/dev_conector?retryWrites=true&w=majority",
+    "jwtSecret": "mysecrettoken"
 }

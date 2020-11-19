@@ -1,7 +1,12 @@
 const express  = require('express');
 const {check, validationResult} = require("express-validator");
+const gravatar = require('gravatar');
+const bcrypt = require('bcryptjs');
+const jwt = require('jsonwebtoken');
+const config = require('config');
 
-
+//require user model
+const User = require('../../models/User');
 
 
 const router = express.Router();
@@ -26,7 +31,7 @@ router.post('/',
 
     check('password','Enter a valid password, which contain 8 or more characters')
     .isLength({ min:8 })
-],(req,res)=> {
+],async (req,res)=> {
     const errors = validationResult(req);
     //Look to see if there are errors
     if(!errors.isEmpty()){
@@ -35,10 +40,67 @@ router.post('/',
             errors: errors.array()
         });
     }
+
+    const { name, email, password } = req.body;
     
+    try {
+   
+    //see if users exists
+    let user = await User.findOne({ email });
     
-    console.log(req.body);
-    res.send('resgistration route');
+    if(user){
+       return res.status(400).json({ errors: [
+            {msg:"User already exists"}
+        ]});
+    };
+    //Get users gravatar
+    const avatar  = gravatar.url(email,{
+        s: '200',
+        r: 'pg',
+        d: 'mm'
+    });
+
+    user = new User({
+        name,
+        email,
+        password,
+        avatar
+    });
+    //Encrypt password
+    const salt  = await bcrypt.genSalt(10);
+
+    user.password = await bcrypt.hash(password,salt);
+
+    await user.save();
+    //Return jsonwebtoken
+    const payload = {
+        user:{
+            id: user.id
+        }
+    }
+
+    jwt.sign(
+        payload, 
+        config.get('jwtSecret'),
+        {expiresIn:360000},
+        (err, token)=>{
+            if(err) throw err;
+            res.json({ token });
+        }
+        );
+
+
+
+
+
+} catch (error) {
+    console.error(err.message);
+    res.status(500).send('Server error');
+}
+
+
+
+
 });
 
 
