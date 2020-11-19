@@ -18,7 +18,7 @@ router.get('/', (req,res)=> res.send('User route'));
 
 //@route POST api/users
 //@desc  Register User
-//@acess public
+//@access public
 router.post('/',
 // setting rules for validation
 [
