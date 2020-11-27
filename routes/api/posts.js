@@ -7,7 +7,7 @@ const auth = require('../../middleware/auth');
 
 
 //models
-const Posts = require('../../models/Post');
+const Post = require('../../models/Post');
 const Profile = require('../../models/Profile');
 const User = require('../../models/User');
 
@@ -45,10 +45,5 @@ router.post(
       }
     }
   );
-
-
-
-
-
 
 module.exports = router;
