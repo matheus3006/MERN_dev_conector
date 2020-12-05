@@ -7,7 +7,7 @@ const bcrypt = require('bcryptjs');
 const router = express.Router();
 
 const auth = require('../../middleware/auth');
-//Model from mongo db
+  //Model from mongo db
 const User = require('../../models/User');
 //@route    GET api/auth
 //@desc     Test route
