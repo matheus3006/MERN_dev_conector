@@ -100,6 +100,7 @@ router.delete('/:id', auth, async (req, res) => {
     }
     res.status(500).send('Server Error');
   }
+  
 });
 
 // @Route   PUT api/posts/like/:id
